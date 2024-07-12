@@ -2,13 +2,11 @@ package com.salah;
 
 import com.salah.entity.User;
 import com.salah.entity.UserRole;
-import com.salah.registration.token.ConfirmationToken;
 import com.salah.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Role;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +34,9 @@ public class Main {
         return args -> {
 
                 userRepository.save(new User("Salah", "Gouja", "salahgouja11@gmail.com",
-                        "YXplcnR5MTIz",false,false, UserRole.ADMIN));
+                        "$2a$10$gaKY6VrRkLNyauC63CZaa.bswMiZFS3j4rfyspqXQa6RFEo8061IC",false,false, UserRole.ADMIN));
                 userRepository.save(new User("Thouraya", "Gouja", "thourayagouja@gmail.com",
-                        "YXplcnR5MTIz",false,false, UserRole.DOCTOR));
+                        "$2a$10$gaKY6VrRkLNyauC63CZaa.bswMiZFS3j4rfyspqXQa6RFEo8061IC",false,false, UserRole.DOCTOR));
                 userRepository.save(new User("Dhafer", "Gouja", "dhafergouja@gmail.com",
                     "$2a$10$1Lckw/wW.7u1GpWPXLe5NOtbHnGQRMuHc0W9NM1r7VT4lKiEDYiD.",false,false, UserRole.PATIENT));
                 userRepository.save(new User("Rania", "Gouja", "raniaagouja@gmail.com",

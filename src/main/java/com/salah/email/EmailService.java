@@ -47,14 +47,14 @@ public class EmailService  {
 
         Map<String,Object> prop = new HashMap<>();
         prop.put("username",username);
-        prop.put("confirmationUrl",confirmationUrl);
-        prop.put("activationCode",activationCode);
+        prop.put("confirmation_Url",confirmationUrl);
+        prop.put("activation_Code",activationCode);
 
 
         Context context = new Context();
         context.setVariables(prop);
 
-        helper.setFrom("salahgouja2001@gmail.com");
+        helper.setFrom("Medsystem@gmail.com");
         helper.setTo(to);
         helper.setSubject(subject);
 

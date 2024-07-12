@@ -9,19 +9,17 @@ import com.salah.entity.Patient;
 import com.salah.entity.Reception;
 import com.salah.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("api/v1/users")
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
     @GetMapping
     public List<UserDTO> getUsers() {
         return userService.getUsers();

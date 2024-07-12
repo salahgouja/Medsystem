@@ -54,9 +54,9 @@
     <div class="content">
         <p>Hello <span th:text="${username}">User</span>,</p>
         <p>Thank you for registering with us. Please click the button below to activate your account:</p>
-        <a th:href="${confirmationUrl}" class="button">Activate Account</a>
+        <a th:href="${confirmation_Url}" class="button">Activate Account</a>
         <p>Or use the following activation code:</p>
-        <p><strong th:text="${activationCode}">123456</strong></p>
+        <p th:text="${activation_Code}"> </p>
     </div>
     <div class="footer">
         <p>If you did not sign up for this account, please ignore this email.</p>

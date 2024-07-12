@@ -34,7 +34,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                                 req -> req.requestMatchers(
-                                        "/auth/**"
+                                        "/api/v1/auth/**"
                                         ,"/v3/api-docs",
                                         "/v3/api-docs/**",
                                         "/swagger-resources",
@@ -45,11 +45,12 @@ public class WebSecurityConfig {
                                         "/webjars/**",
                                         "/swagger-ui.html")
                                 .permitAll()
-                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                                .requestMatchers("/doctor/**").hasAnyRole("DOCTOR")
-                                .requestMatchers("/patient/**").hasAnyRole("PATIENT")
-                                .requestMatchers("/reception/**").hasAnyRole("RECEPTION")
-                                .requestMatchers("/login/**")
+
+                                .requestMatchers("/api/v1/users/admin/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/api/v1/users/doctor/**").hasAnyRole("DOCTOR")
+                                .requestMatchers("/api/v1/users/patient/**").hasAnyRole("PATIENT")
+                                .requestMatchers("/api/v1/users/reception/**").hasAnyRole("RECEPTION")
+                                .requestMatchers("/api/v1/users/login/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

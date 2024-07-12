@@ -3,6 +3,7 @@ package com.salah.dto;
 import com.salah.entity.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -12,7 +13,7 @@ public record UserDTO(
         @NotBlank String lastname,
         @Email String email,
         @NotBlank String password,
-        String phone,
+        @Nullable String phone,
         String gender,
         String image,
         String title,
