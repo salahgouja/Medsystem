@@ -38,7 +38,7 @@ public class Task {
     private String name;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "createdAt",
+    @Column(name = "created_At",
             nullable = false
     )
     private Date createdAt;

@@ -1,8 +1,8 @@
 package com.salah;
 
-import com.salah.entity.User;
+import com.salah.auth.AuthenticationService;
+import com.salah.auth.RegisterRequest;
 import com.salah.entity.UserRole;
-import com.salah.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @EnableAutoConfiguration
 @Configuration
 */
-
-@EnableJpaAuditing
 @SpringBootApplication
 @RestController
-@RequestMapping("api/v1/users")
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@RequestMapping
 @EnableAsync
 public class Main {
 
@@ -29,18 +28,49 @@ public class Main {
 
     }
     @Bean
-    CommandLineRunner run(UserRepository userRepository) {
+    public CommandLineRunner commandLineRunner( AuthenticationService service) {
 
         return args -> {
 
-                userRepository.save(new User("Salah", "Gouja", "salahgouja11@gmail.com",
-                        "$2a$10$gaKY6VrRkLNyauC63CZaa.bswMiZFS3j4rfyspqXQa6RFEo8061IC",false,false, UserRole.ADMIN));
-                userRepository.save(new User("Thouraya", "Gouja", "thourayagouja@gmail.com",
-                        "$2a$10$gaKY6VrRkLNyauC63CZaa.bswMiZFS3j4rfyspqXQa6RFEo8061IC",false,false, UserRole.DOCTOR));
-                userRepository.save(new User("Dhafer", "Gouja", "dhafergouja@gmail.com",
-                    "$2a$10$1Lckw/wW.7u1GpWPXLe5NOtbHnGQRMuHc0W9NM1r7VT4lKiEDYiD.",false,false, UserRole.PATIENT));
-                userRepository.save(new User("Rania", "Gouja", "raniaagouja@gmail.com",
-                    "$2a$10$1Lckw/wW.7u1GpWPXLe5NOtbHnGQRMuHc0W9NM1r7VT4lKiEDYiD.",false,false, UserRole.RECEPTION));
+
+            var admin = RegisterRequest.builder()
+                    .firstname("Admin")
+                    .lastname("Admin")
+                    .email("admin@mail.com")
+                    .password("password")
+                    .role(UserRole.ADMIN)
+                    .build();
+            System.out.println("Admin token: " + service.register(admin).getAccessToken());
+
+            var doctor = RegisterRequest
+                    .builder()
+                    .firstname("doctor")
+                    .lastname("doctor")
+                    .email("doctor@mail.com")
+                    .password("password")
+                    .role(UserRole.DOCTOR)
+                    .build();
+            System.out.println("Doctor token: " + service.register(doctor).getAccessToken());
+
+            var reception = RegisterRequest
+                    .builder()
+                    .firstname("reception")
+                    .lastname("reception")
+                    .email("reception@mail.com")
+                    .password("password")
+                    .role(UserRole.RECEPTION)
+                    .build();
+            System.out.println("Reception token: " + service.register(reception).getAccessToken());
+
+            var patient = RegisterRequest
+                    .builder()
+                    .firstname("patient")
+                    .lastname("patient")
+                    .email("patient@mail.com")
+                    .password("password")
+                    .role(UserRole.PATIENT)
+                    .build();
+            System.out.println("Patient token: " + service.register(patient).getAccessToken());
 
 
         };
@@ -48,52 +78,4 @@ public class Main {
     }
 }
 
-/*
-@GetMapping("/greet")
-    public GreetingResponse greet() {
-        GreetingResponse response = new GreetingResponse(
-                " hello",
-                List.of("java", "js","php"),
-                new Person("salah", "gouja", 23)
-        );
-        return response;
-    }
-
-    record Person(String nom, String prenom, int age) {
-    }
-
-    record GreetingResponse(String greet, List<String> favprogramminglanguage, Person person) {
-    }
-
-}
-*/
-//return a json file {"greet":"hello"}
-
-	// record replace all the code bellow toString+hashcode+getmethode
-   /* class GreetingResponse{
-        private final String greet;
-
-        GreetingResponse(String greet){
-            this.greet=greet;
-
-        }
-        public String getGreet(){
-            return greet ;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            GreetingResponse that = (GreetingResponse) o;
-            return Objects.equals(greet, that.greet);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(greet);
-        }
-    }
-
-*/
 //netstat -ao |find /i "listening" to find and close the port

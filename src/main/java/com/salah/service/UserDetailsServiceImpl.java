@@ -1,4 +1,4 @@
-package com.salah.security;
+package com.salah.service;
 
 import com.salah.exception.UserNotFoundException;
 import com.salah.repository.UserRepository;

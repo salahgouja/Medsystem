@@ -8,9 +8,6 @@ import com.salah.entity.*;
 import com.salah.exception.UserNotFoundException;
 import com.salah.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -93,7 +90,6 @@ public class UserService  {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
-                user.getPassword(),
                 user.getPhone(),
                 user.getGender(),
                 user.getImage(),
@@ -111,7 +107,6 @@ public class UserService  {
         user.setFirstname(userDTO.firstname());
         user.setLastname(userDTO.lastname());
         user.setEmail(userDTO.email());
-        user.setPassword(userDTO.password());
         user.setPhone(userDTO.phone());
         user.setGender(userDTO.gender());
         user.setImage(userDTO.image());

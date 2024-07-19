@@ -12,7 +12,6 @@ public record UserDTO(
         @NotBlank String firstname,
         @NotBlank String lastname,
         @Email String email,
-        @NotBlank String password,
         @Nullable String phone,
         String gender,
         String image,

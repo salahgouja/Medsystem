@@ -1,5 +1,6 @@
 package com.salah.auth;
 
+import com.salah.entity.UserRole;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,5 +24,8 @@ public class RegisterRequest {
     @NotBlank (message = "password is mandatory")
     @Size(min= 6,message = "password should be 6 or more")
     private String password;
+
+    private UserRole role ;
+
 
 }

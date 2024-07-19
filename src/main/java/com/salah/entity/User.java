@@ -1,31 +1,29 @@
 package com.salah.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.salah.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Data
 @Builder
-@EqualsAndHashCode
-@ToString
+@Getter
+@Setter
 @Entity(name ="User" )
 @EntityListeners(AuditingEntityListener.class)
+@DiscriminatorColumn(name = "user_type")
 @Table(name= "users",
         uniqueConstraints = {
                 @UniqueConstraint(name="user_unique_email", columnNames = "email")
@@ -84,7 +82,7 @@ public class User implements UserDetails , Principal  {
     private UserRole role;
 
 
-    @Column(name = "accountLocked")
+    @Column(name = "account_Locked")
     private Boolean accountLocked;
     @Column(name = "enabled")
     private Boolean enabled;
@@ -96,6 +94,10 @@ public class User implements UserDetails , Principal  {
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate ;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"user"})
+    private List<Token> tokens = new ArrayList<>();
+
 
 
     @Override
@@ -105,8 +107,11 @@ public class User implements UserDetails , Principal  {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
+        /*
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
+        */
     }
 
     @Override
@@ -143,13 +148,5 @@ public class User implements UserDetails , Principal  {
         return firstname + " " + lastname ;
     }
 
-    public User(String firstname, String lastname, String email, String password, Boolean accountLocked, Boolean enabled ,UserRole role) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.accountLocked = accountLocked;
-        this.enabled = enabled;
-    }
+
 }

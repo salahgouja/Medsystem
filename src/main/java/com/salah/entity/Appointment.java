@@ -9,10 +9,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
+
 @Entity
 @Table(name = "appointments")
-public class Appointment {
+public class Appointment  {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appointment_id_sequence")
     @SequenceGenerator(name = "appointment_id_sequence", sequenceName = "appointment_id_sequence", allocationSize = 1)

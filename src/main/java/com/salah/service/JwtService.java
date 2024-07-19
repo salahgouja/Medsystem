@@ -22,6 +22,9 @@ public class JwtService {
     @Value("${application.security.jwt.expiration}")
     private String secretKey;
 
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private long refreshExpiration;
+
     public  String generateToken(Map<String,Object> claims, UserDetails userDetails) {
         return  buildToken(claims,userDetails,jwtExpiration) ;
     }
@@ -46,6 +49,10 @@ public class JwtService {
                 .signWith(getSignInKey(),SignatureAlgorithm.HS256)
                 .compact();
 
+    }
+
+    public  String generateRefreshToken(Map<String,Object> claims, UserDetails userDetails) {
+        return  buildToken(claims,userDetails,refreshExpiration) ;
     }
 
     private Key getSignInKey() {
@@ -81,6 +88,5 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 
 }

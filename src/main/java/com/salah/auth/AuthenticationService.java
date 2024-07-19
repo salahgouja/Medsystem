@@ -1,26 +1,38 @@
 package com.salah.auth;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.salah.email.EmailService;
 import com.salah.email.EmailTemplateName;
-import com.salah.entity.Token;
+import com.salah.token.Token;
 import com.salah.entity.User;
 import com.salah.entity.UserRole;
-import com.salah.repository.TokenRepository;
+import com.salah.token.TokenRepository;
 import com.salah.repository.UserRepository;
 import com.salah.service.JwtService;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
 @RequiredArgsConstructor
@@ -33,14 +45,15 @@ public class AuthenticationService {
     private final EmailService emailService ;
     private final AuthenticationManager authenticationManager ;
     private final JwtService jwtService;
-
+    private final UserDetailsService userDetailsService ;
 
     @Value("${mailing.frontend.activation-url}")
     private String activationUrl;
 
     public AuthenticationResponse register(RegisterRequest request) throws MessagingException {
-
-        var userRole= userRepository.findByRole(UserRole.valueOf("ADMIN")).orElseThrow(()->new IllegalStateException("role was not initialized"));
+        if (request.getRole() == null) {
+            request.setRole(UserRole.DOCTOR);
+        }
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -48,14 +61,22 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
-                .role(userRole.getRole())
+                .role(request.getRole())
                 .build();
 
         userRepository.save(user);
         sendValidationEmail(user);
 
-        return null;
+        var jwtToken = jwtService.generateToken(new HashMap<>(), user);
+        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(jwtRefreshToken)
+                .build();
+
     }
+
 
     private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);
@@ -114,8 +135,13 @@ public class AuthenticationService {
         claims.put("fullName", user.fullName());
 
         var jwtToken = jwtService.generateToken(claims,user);
+        var jwtRefreshToken = jwtService.generateRefreshToken(claims,user);
 
-        return AuthenticationResponse.builder().accessToken(jwtToken).build() ;
+        return AuthenticationResponse
+                .builder()
+                .accessToken(jwtToken)
+                .refreshToken(jwtRefreshToken)
+                .build() ;
     }
     @Transactional
     public void activateAccount(String token) throws MessagingException {
@@ -130,5 +156,32 @@ public class AuthenticationService {
 
     savedToken.setValidatedAt(LocalDateTime.now());
     tokenRepository.save(savedToken);
+    }
+
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+
+        final String authHeader =request.getHeader(AUTHORIZATION);
+        final String refreshToken;
+        final String userEmail ;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+            return;
+        }
+        refreshToken = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(refreshToken);
+
+        if (userEmail!=null && SecurityContextHolder.getContext().getAuthentication() == null){
+             UserDetails user = userDetailsService.loadUserByUsername(userEmail);
+            if (jwtService.isTokenValid(refreshToken,user)){
+                var accessToken = jwtService.generateToken(new HashMap<>(),user);
+                var authResponse = AuthenticationResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build();
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+            }
+        }
     }
 }

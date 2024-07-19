@@ -6,6 +6,7 @@ import com.salah.exception.RecordNotFoundException;
 import com.salah.repository.AppointmentRepository;
 import com.salah.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

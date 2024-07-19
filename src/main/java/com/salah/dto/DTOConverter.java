@@ -10,7 +10,6 @@ public class DTOConverter {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
-                user.getPassword(),
                 user.getPhone(),
                 user.getGender(),
                 user.getImage(),

@@ -1,5 +1,6 @@
-package com.salah.entity;
+package com.salah.token;
 
+import com.salah.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +19,8 @@ public class Token {
     @GeneratedValue
     private Long id ;
     private String token ;
+    @Enumerated(EnumType.STRING)
+    public TokenType tokenType = TokenType.BEARER;
     private LocalDateTime createdAt ;
     private LocalDateTime expiresAt ;
     private LocalDateTime validatedAt ;

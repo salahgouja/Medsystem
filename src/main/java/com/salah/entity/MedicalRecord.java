@@ -24,10 +24,10 @@ public class MedicalRecord {
     private Date dateCreated;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn
     private Doctor doctor;
 }

@@ -18,76 +18,76 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
 public class UserController {
-    private final UserService userService;
+    private final UserService service;
 
     @GetMapping
     public List<UserDTO> getUsers() {
-        return userService.getUsers();
+        return service.getUsers();
     }
 
     @PostMapping("/admin")
     public void addAdmin(@RequestBody @Valid UserDTO userDTO) {
-        userService.addUser(userDTO);
+        service.addUser(userDTO);
     }
 
     @PostMapping("/doctor")
     public void addDoctor(@RequestBody @Valid DoctorDTO doctorDTO) {
-        userService.addDoctor(doctorDTO);
+        service.addDoctor(doctorDTO);
     }
 
     @PostMapping("/patient")
     public void addPatient(@RequestBody @Valid PatientDTO patientDTO) {
-        userService.addPatient(patientDTO);
+        service.addPatient(patientDTO);
     }
 
     @PostMapping("/reception")
     public void addReception(@RequestBody @Valid ReceptionDTO receptionDTO) {
-        userService.addReception(receptionDTO);
+        service.addReception(receptionDTO);
     }
 
     @DeleteMapping("{userId}")
     public void deleteUser(@PathVariable("userId") Long id) {
-        userService.deleteUser(id);
+        service.deleteUser(id);
     }
 
     @PutMapping("{userId}")
     public void updateUser(@PathVariable("userId") Long id, @RequestBody @Valid UserDTO userDTO) {
-        userService.updateUser(id, userDTO);
+        service.updateUser(id, userDTO);
     }
 
     @GetMapping("/{userId}")
     public UserDTO getUserById(@PathVariable Long userId) {
-        return userService.getUserById(userId);
+        return service.getUserById(userId);
     }
 
     @GetMapping("/firstname/{firstname}")
     public List<UserDTO> getUsersByFirstname(@PathVariable String firstname) {
-        return userService.getUsersByFirstname(firstname);
+        return service.getUsersByFirstname(firstname);
     }
 
     @GetMapping("/lastname/{lastname}")
     public List<UserDTO> getUsersByLastname(@PathVariable String lastname) {
-        return userService.getUsersByLastname(lastname);
+        return service.getUsersByLastname(lastname);
     }
 
     @GetMapping("/email/{email}")
     public List<UserDTO> getUsersByEmail(@PathVariable String email) {
-        return userService.getUsersByEmail(email);
+        return service.getUsersByEmail(email);
     }
 
     @GetMapping("/doctor/{doctorId}")
     public Doctor getDoctorById(@PathVariable Long doctorId) {
-        return userService.getDoctorById(doctorId);
+        return service.getDoctorById(doctorId);
     }
 
     @GetMapping("/patient/{patientId}")
     public Patient getPatientById(@PathVariable Long patientId) {
-        return userService.getPatientById(patientId);
+        return service.getPatientById(patientId);
     }
 
     @GetMapping("/reception/{receptionId}")
     public Reception getReceptionById(@PathVariable Long receptionId) {
-        return userService.getReceptionById(receptionId);
+        return service.getReceptionById(receptionId);
     }
 
     /////////////////////
@@ -95,33 +95,34 @@ public class UserController {
     @PutMapping("/doctors/{doctorId}/patients")
     public void associatePatients(@PathVariable Long doctorId, @RequestBody Map<String, List<Long>> request) {
         List<Long> patientIds = request.get("patientIds");
-        userService.associatePatients(doctorId, patientIds);
+        service.associatePatients(doctorId, patientIds);
     }
 
     @PutMapping("/doctors/{doctorId}/receptions")
     public void associateReceptions(@PathVariable Long doctorId, @RequestBody Map<String, List<Long>> request) {
         List<Long> receptionIds = request.get("receptionIds");
-        userService.associateReceptions(doctorId, receptionIds);
+        service.associateReceptions(doctorId, receptionIds);
     }
 
     @GetMapping("/doctors/{doctorId}/patients")
     public List<Patient> getDoctorPatients(@PathVariable Long doctorId) {
-        return userService.getDoctorPatients(doctorId);
+        return service.getDoctorPatients(doctorId);
     }
 
     @GetMapping("/doctors/{doctorId}/receptions")
     public List<Reception> getDoctorReceptions(@PathVariable Long doctorId) {
-        return userService.getDoctorReceptions(doctorId);
+        return service.getDoctorReceptions(doctorId);
     }
 
     @GetMapping("/patients/{patientId}/doctors")
+
     public List<Doctor> getPatientDoctors(@PathVariable Long patientId) {
-        return userService.getPatientDoctors(patientId);
+        return service.getPatientDoctors(patientId);
     }
 
     @GetMapping("/receptions/{receptionId}/doctors")
     public List<Doctor> getReceptionDoctors(@PathVariable Long receptionId) {
-        return userService.getReceptionDoctors(receptionId);
+        return service.getReceptionDoctors(receptionId);
     }
 //////////////////
 

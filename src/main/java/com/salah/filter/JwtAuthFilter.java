@@ -1,4 +1,4 @@
-package com.salah.security.config.filter;
+package com.salah.filter;
 
 import com.salah.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -37,6 +37,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request,response);
                 return;
             }
+
 
             final String authHeader =request.getHeader(AUTHORIZATION);
             final String jwt;
