@@ -1,6 +1,6 @@
 package com.salah.security.config;
 
-import com.salah.entity.User;
+import com.salah.user.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

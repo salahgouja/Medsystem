@@ -1,6 +1,6 @@
 package com.salah.repository;
 
-import com.salah.entity.Doctor;
+import com.salah.doctor.Doctor;
 import com.salah.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

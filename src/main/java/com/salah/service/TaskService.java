@@ -1,15 +1,14 @@
 package com.salah.service;
 
 import com.salah.dto.TaskDTO;
-import com.salah.entity.Doctor;
+import com.salah.doctor.Doctor;
 import com.salah.entity.Task;
 import com.salah.exception.TaskNotFoundException;
 import com.salah.repository.TaskRepository;
 
+import com.salah.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,6 @@ public class TaskService {
     public TaskDTO addTask(TaskDTO taskDTO) {
         Task task = new Task();
         mapToEntity(taskDTO, task);
-        task.setCreatedAt(new Date());
         Doctor doctor = userService.getDoctorById(taskDTO.getDoctorId());
         task.setDoctor(doctor);
         Task savedTask = taskRepository.save(task);
@@ -53,7 +51,6 @@ public class TaskService {
         return new TaskDTO(
                 task.getId(),
                 task.getName(),
-                task.getCreatedAt(),
                 task.getPrice(),
                 task.getStatus(),
                 task.getDoctor().getId()

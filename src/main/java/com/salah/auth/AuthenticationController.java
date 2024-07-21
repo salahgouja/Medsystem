@@ -1,6 +1,10 @@
 package com.salah.auth;
 
 
+import com.salah.doctor.RegisterDoctorRequest;
+import com.salah.patient.RegisterPatientRequest;
+import com.salah.reception.RegisterReceptionRequest;
+import com.salah.user.RegisterUserRequest;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,17 +23,45 @@ import java.io.IOException;
 public class AuthenticationController {
     private final AuthenticationService service ;
 
-    @PostMapping("/register")
+    @PostMapping("/registerUser")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody @Valid RegisterRequest request
+    public ResponseEntity<AuthenticationResponse> registerUser(
+            @RequestBody @Valid RegisterUserRequest request
     ) throws MessagingException {
 
-        service.register(request);
+        service.registerUser(request);
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/registerDoctor")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<AuthenticationResponse> registerDoctor(
+            @RequestBody @Valid RegisterDoctorRequest request
+    ) throws MessagingException {
+
+        service.registerDoctor(request);
+        return ResponseEntity.accepted().build();
+    }
+    @PostMapping("/registerPatient")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<AuthenticationResponse> registerPatient(
+            @RequestBody @Valid RegisterPatientRequest request
+    ) throws MessagingException {
+
+        service.registerPatient(request);
         return ResponseEntity.accepted().build();
     }
 
 
+    @PostMapping("/registerReception")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<AuthenticationResponse> registerReception(
+            @RequestBody @Valid RegisterReceptionRequest request
+    ) throws MessagingException {
+
+        service.registerReception(request);
+        return ResponseEntity.accepted().build();
+    }
 
     @PostMapping("/authenticate")
     @ResponseStatus(HttpStatus.ACCEPTED)

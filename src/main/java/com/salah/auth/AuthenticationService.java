@@ -2,13 +2,23 @@ package com.salah.auth;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.salah.doctor.RegisterDoctorRequest;
 import com.salah.email.EmailService;
 import com.salah.email.EmailTemplateName;
+import com.salah.doctor.Doctor;
+import com.salah.doctor.DoctorRepository;
+import com.salah.patient.Patient;
+import com.salah.patient.PatientRepository;
+import com.salah.patient.RegisterPatientRequest;
+import com.salah.reception.Reception;
+import com.salah.reception.ReceptionRepository;
+import com.salah.reception.RegisterReceptionRequest;
 import com.salah.token.Token;
-import com.salah.entity.User;
-import com.salah.entity.UserRole;
+import com.salah.user.RegisterUserRequest;
+import com.salah.user.User;
+import com.salah.user.UserRole;
 import com.salah.token.TokenRepository;
-import com.salah.repository.UserRepository;
+import com.salah.user.UserRepository;
 import com.salah.service.JwtService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +33,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +49,11 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 public class AuthenticationService {
     private final UserRepository userRepository ;
+    private final DoctorRepository doctorRepository ;
+    private final PatientRepository patientRepository ;
+    private final ReceptionRepository receptionRepository ;
+
+
     private final PasswordEncoder passwordEncoder ;
     private final TokenRepository tokenRepository ;
     private final EmailService emailService ;
@@ -50,7 +64,7 @@ public class AuthenticationService {
     @Value("${mailing.frontend.activation-url}")
     private String activationUrl;
 
-    public AuthenticationResponse register(RegisterRequest request) throws MessagingException {
+    public AuthenticationResponse registerUser(RegisterUserRequest request) throws MessagingException {
         if (request.getRole() == null) {
             request.setRole(UserRole.DOCTOR);
         }
@@ -76,7 +90,86 @@ public class AuthenticationService {
                 .build();
 
     }
+    public AuthenticationResponse registerDoctor(RegisterDoctorRequest request) throws MessagingException {
+        if (request.getRole() == null) {
+            request.setRole(UserRole.DOCTOR);
+        }
+        Doctor doctor = new Doctor(
+                request.getFirstname() ,
+                request.getLastname(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getAccountLocked(),
+                request.getEnabled(),
+                request.getSpecialization()
+        );
 
+        doctorRepository.save(doctor);
+        sendValidationEmail(doctor);
+
+        var jwtToken = jwtService.generateToken(new HashMap<>(), doctor);
+        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), doctor);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(jwtRefreshToken)
+                .build();
+
+    }
+
+    public AuthenticationResponse registerPatient(RegisterPatientRequest request) throws MessagingException {
+        if (request.getRole() == null) {
+            request.setRole(UserRole.PATIENT);
+        }
+        Patient patient = new Patient(
+                request.getFirstname() ,
+                request.getLastname(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getAccountLocked(),
+                request.getEnabled(),
+                request.getMedicalRecordNumber()
+        );
+
+        patientRepository.save(patient);
+        sendValidationEmail(patient);
+
+        var jwtToken = jwtService.generateToken(new HashMap<>(), patient);
+        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), patient);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(jwtRefreshToken)
+                .build();
+
+    }
+
+    public AuthenticationResponse registerReception(RegisterReceptionRequest request) throws MessagingException {
+        if (request.getRole() == null) {
+            request.setRole(UserRole.RECEPTION);
+        }
+        Reception reception = new Reception(
+                request.getFirstname() ,
+                request.getLastname(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getAccountLocked(),
+                request.getEnabled(),
+                request.getSalary()
+        );
+
+        receptionRepository.save(reception);
+        sendValidationEmail(reception);
+
+        var jwtToken = jwtService.generateToken(new HashMap<>(), reception);
+        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), reception);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(jwtRefreshToken)
+                .build();
+
+    }
 
     private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);

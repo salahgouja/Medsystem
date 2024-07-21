@@ -1,6 +1,6 @@
 package com.salah.token;
 
-import com.salah.entity.User;
+import com.salah.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 

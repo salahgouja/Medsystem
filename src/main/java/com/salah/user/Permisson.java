@@ -1,4 +1,4 @@
-package com.salah.entity;
+package com.salah.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

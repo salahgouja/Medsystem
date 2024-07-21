@@ -31,19 +31,20 @@ public class TaskController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('admin:create', 'doctor:create')")
     public TaskDTO addTask(@RequestBody @Valid TaskDTO taskDTO) {
         return taskService.addTask(taskDTO);
     }
 
     @PutMapping("/{taskId}")
-    @PreAuthorize("hasAnyAuthority('admin:write', 'doctor:write')")
+    @PreAuthorize("hasAnyAuthority('admin:update', 'doctor:update')")
 
     public TaskDTO updateTask(@PathVariable Long taskId, @RequestBody @Valid TaskDTO taskDTO) {
         return taskService.updateTask(taskId, taskDTO);
     }
 
     @DeleteMapping("/{taskId}")
-    @PreAuthorize("hasAnyAuthority('admin:write', 'doctor:write')")
+    @PreAuthorize("hasAnyAuthority('admin:delete', 'doctor:delete')")
 
     public void deleteTask(@PathVariable Long taskId) {
         taskService.deleteTask(taskId);

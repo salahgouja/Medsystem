@@ -1,4 +1,4 @@
-package com.salah.entity;
+package com.salah.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.salah.token.Token;
@@ -95,7 +95,7 @@ public class User implements UserDetails , Principal  {
     private LocalDateTime lastModifiedDate ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"user"})
+    @JsonIgnoreProperties({"user","enabled","account_Locked",})
     private List<Token> tokens = new ArrayList<>();
 
 
@@ -148,5 +148,20 @@ public class User implements UserDetails , Principal  {
         return firstname + " " + lastname ;
     }
 
+    public User(String firstname, String lastname, String email, String password ) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
 
+    }
+
+    public User(String firstname, String lastname, String email, String password, Boolean accountLocked, Boolean enabled) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.accountLocked = accountLocked;
+        this.enabled = enabled;
+    }
 }

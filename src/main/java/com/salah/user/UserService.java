@@ -1,13 +1,16 @@
-package com.salah.service;
+package com.salah.user;
 
-import com.salah.dto.DoctorDTO;
-import com.salah.dto.PatientDTO;
-import com.salah.dto.ReceptionDTO;
-import com.salah.dto.UserDTO;
-import com.salah.entity.*;
+import com.salah.doctor.Doctor;
+import com.salah.doctor.DoctorDTO;
+import com.salah.patient.PatientDTO;
+import com.salah.patient.PatientRepository;
+import com.salah.reception.ReceptionDTO;
 import com.salah.exception.UserNotFoundException;
-import com.salah.repository.UserRepository;
+import com.salah.patient.Patient;
+import com.salah.reception.Reception;
+import com.salah.doctor.DoctorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,9 @@ import java.util.stream.Collectors;
 public class UserService  {
 
     private final UserRepository userRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+    private final PasswordEncoder passwordEncoder ;
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(this::mapToDTO)
@@ -90,6 +96,7 @@ public class UserService  {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
+                user.getPassword(),
                 user.getPhone(),
                 user.getGender(),
                 user.getImage(),
@@ -107,6 +114,7 @@ public class UserService  {
         user.setFirstname(userDTO.firstname());
         user.setLastname(userDTO.lastname());
         user.setEmail(userDTO.email());
+        user.setPassword(passwordEncoder.encode(userDTO.password()));
         user.setPhone(userDTO.phone());
         user.setGender(userDTO.gender());
         user.setImage(userDTO.image());
@@ -150,7 +158,7 @@ public class UserService  {
 
     // Associate patients with a doctor
     public void associatePatients(Long doctorId, List<Long> patientIds) {
-        Doctor doctor = (Doctor) userRepository.findById(doctorId)
+        Doctor doctor =  doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new UserNotFoundException("Doctor " + doctorId + " not found"));
         List<Patient> patients = userRepository.findAllById(patientIds).stream()
                 .map(user -> (Patient) user)

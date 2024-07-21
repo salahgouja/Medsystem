@@ -13,8 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.salah.entity.Permisson.*;
-import static com.salah.entity.UserRole.*;
+import static com.salah.user.Permisson.*;
+import static com.salah.user.UserRole.*;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -92,8 +92,7 @@ public class WebSecurityConfig {
                                         .requestMatchers(PUT, "/api/v1/users/admin/**").hasAnyAuthority(ADMIN_UPDATE.name())
                                         .requestMatchers(DELETE, "/api/v1/users/admin/**").hasAnyAuthority(ADMIN_DELETE.name())
 
-                                        .requestMatchers("/api/v1/users/{userId}").hasAnyRole(ADMIN.name())
-                                        .requestMatchers(DELETE, "/api/v1/users/{userId}").hasAnyAuthority(ADMIN_DELETE.name())
+
 
                                 .anyRequest()
                                 .authenticated())

@@ -1,12 +1,15 @@
 package com.salah.service;
 
 import com.salah.entity.Appointment;
-import com.salah.entity.User;
+import com.salah.patient.Patient;
+import com.salah.patient.PatientRepository;
+import com.salah.reception.Reception;
+import com.salah.reception.ReceptionRepository;
+import com.salah.user.User;
 import com.salah.exception.RecordNotFoundException;
 import com.salah.repository.AppointmentRepository;
-import com.salah.repository.UserRepository;
+import com.salah.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +20,8 @@ import java.util.List;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-    private final UserRepository userRepository;
+    private final PatientRepository patientRepository;
+    private final ReceptionRepository receptionRepository;
 
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
@@ -29,9 +33,9 @@ public class AppointmentService {
     }
 
     public void createAppointment(Long patientId, Long receptionId, Appointment appointment) {
-        User patient = userRepository.findById(patientId)
+        Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RecordNotFoundException("Patient " + patientId + " not found"));
-        User reception = userRepository.findById(receptionId)
+        Reception reception = receptionRepository.findById(receptionId)
                 .orElseThrow(() -> new RecordNotFoundException("Reception " + receptionId + " not found"));
         appointment.setPatient(patient);
         appointment.setReception(reception);

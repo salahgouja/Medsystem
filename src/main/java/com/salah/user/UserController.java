@@ -1,13 +1,11 @@
-package com.salah.controller;
+package com.salah.user;
 
-import com.salah.dto.DoctorDTO;
-import com.salah.dto.PatientDTO;
-import com.salah.dto.ReceptionDTO;
-import com.salah.dto.UserDTO;
-import com.salah.entity.Doctor;
-import com.salah.entity.Patient;
-import com.salah.entity.Reception;
-import com.salah.service.UserService;
+import com.salah.doctor.DoctorDTO;
+import com.salah.patient.PatientDTO;
+import com.salah.reception.ReceptionDTO;
+import com.salah.doctor.Doctor;
+import com.salah.patient.Patient;
+import com.salah.reception.Reception;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

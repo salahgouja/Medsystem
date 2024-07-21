@@ -1,8 +1,11 @@
 package com.salah;
 
 import com.salah.auth.AuthenticationService;
-import com.salah.auth.RegisterRequest;
-import com.salah.entity.UserRole;
+import com.salah.doctor.RegisterDoctorRequest;
+import com.salah.patient.RegisterPatientRequest;
+import com.salah.reception.RegisterReceptionRequest;
+import com.salah.user.RegisterUserRequest;
+import com.salah.user.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,44 +36,47 @@ public class Main {
         return args -> {
 
 
-            var admin = RegisterRequest.builder()
+            var admin = RegisterUserRequest.builder()
                     .firstname("Admin")
                     .lastname("Admin")
                     .email("admin@mail.com")
                     .password("password")
                     .role(UserRole.ADMIN)
                     .build();
-            System.out.println("Admin token: " + service.register(admin).getAccessToken());
+            System.out.println("Admin token: " + service.registerUser(admin).getAccessToken());
 
-            var doctor = RegisterRequest
+            var doctor = RegisterDoctorRequest
                     .builder()
                     .firstname("doctor")
                     .lastname("doctor")
                     .email("doctor@mail.com")
                     .password("password")
                     .role(UserRole.DOCTOR)
+                    .specialization("dentiste")
                     .build();
-            System.out.println("Doctor token: " + service.register(doctor).getAccessToken());
+            System.out.println("Doctor token: " + service.registerDoctor(doctor).getAccessToken());
 
-            var reception = RegisterRequest
+            var reception = RegisterReceptionRequest
                     .builder()
                     .firstname("reception")
                     .lastname("reception")
                     .email("reception@mail.com")
                     .password("password")
                     .role(UserRole.RECEPTION)
+                    .salary(3500.0F)
                     .build();
-            System.out.println("Reception token: " + service.register(reception).getAccessToken());
+            System.out.println("Reception token: " + service.registerReception(reception).getAccessToken());
 
-            var patient = RegisterRequest
+            var patient = RegisterPatientRequest
                     .builder()
                     .firstname("patient")
                     .lastname("patient")
                     .email("patient@mail.com")
                     .password("password")
                     .role(UserRole.PATIENT)
+                    .medicalRecordNumber(111L)
                     .build();
-            System.out.println("Patient token: " + service.register(patient).getAccessToken());
+            System.out.println("Patient token: " + service.registerPatient(patient).getAccessToken());
 
 
         };
@@ -78,4 +84,4 @@ public class Main {
     }
 }
 
-//netstat -ao |find /i "listening" to find and close the port
+//netstat -a -o -n

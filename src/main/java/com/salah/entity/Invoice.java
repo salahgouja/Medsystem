@@ -1,5 +1,9 @@
 package com.salah.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.salah.patient.Patient;
+import com.salah.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,11 +13,13 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@JsonIgnoreProperties({"createdBy","lastModifiedDate","createdDate","lastModifiedBy"})
+
 @Entity
 @Table(name = "invoices")
-public class Invoice {
+public class Invoice extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_id_sequence")
     @SequenceGenerator(name = "invoice_id_sequence", sequenceName = "invoice_id_sequence", allocationSize = 1)
@@ -22,10 +28,12 @@ public class Invoice {
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
-    private User patient;
+    private Patient patient;
+    @JsonProperty("patient")
+    private Long getPatientId(){
+        return patient.getId();
+    }
 
-    @Column(name = "created_at", nullable = false)
-    private Date createdAt;
 
     @Column(name = "total_amount", nullable = false)
     private Float totalAmount;

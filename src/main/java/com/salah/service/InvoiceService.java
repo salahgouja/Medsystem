@@ -1,14 +1,13 @@
 package com.salah.service;
 
 import com.salah.entity.Invoice;
-import com.salah.entity.User;
+import com.salah.patient.Patient;
+import com.salah.patient.PatientRepository;
 import com.salah.exception.UserNotFoundException;
 import com.salah.repository.InvoiceRepository;
-import com.salah.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,7 +16,7 @@ import java.util.List;
 public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-    private final UserRepository userRepository;
+    private final PatientRepository patientRepository;
 
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAll();
@@ -29,10 +28,8 @@ public class InvoiceService {
     }
 
     public void createInvoice(Invoice invoice) {
-        User patient = userRepository.findById(invoice.getPatient().getId())
+        Patient patient = patientRepository.findById(invoice.getPatient().getId())
                 .orElseThrow(() -> new UserNotFoundException("Patient not found"));
-
-        invoice.setCreatedAt(new Date());
         invoice.setPatient(patient);
         invoiceRepository.save(invoice);
     }
@@ -41,8 +38,7 @@ public class InvoiceService {
         Invoice invoice = invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new RuntimeException("Invoice not found"));
 
-        // Check if patient exists
-        User patient = userRepository.findById(updatedInvoice.getPatient().getId())
+        Patient patient = patientRepository.findById(updatedInvoice.getPatient().getId())
                 .orElseThrow(() -> new UserNotFoundException("Patient not found"));
 
         invoice.setPatient(patient);

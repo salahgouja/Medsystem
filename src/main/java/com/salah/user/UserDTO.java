@@ -1,6 +1,5 @@
-package com.salah.dto;
+package com.salah.user;
 
-import com.salah.entity.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.lang.Nullable;
@@ -11,7 +10,8 @@ public record UserDTO(
         Long id,
         @NotBlank String firstname,
         @NotBlank String lastname,
-        @Email String email,
+        @Email @NotBlank String email,
+        @NotBlank String password,
         @Nullable String phone,
         String gender,
         String image,

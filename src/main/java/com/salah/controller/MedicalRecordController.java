@@ -4,9 +4,11 @@ import com.salah.entity.MedicalRecord;
 import com.salah.service.MedicalRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@Controller
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/medicalRecords")
@@ -18,8 +20,13 @@ public class MedicalRecordController {
 
     @GetMapping("/doctor/{doctorId}")
     @PreAuthorize("hasAnyAuthority('admin:read', 'doctor:read' , 'reception:read' ,'patient:read' )")
-    public List<MedicalRecord> getAllMedicalRecords(@PathVariable Long doctorId) {
-        return medicalRecordService.getAllMedicalRecords(doctorId);
+    public List<MedicalRecord> getAllMedicalRecordsForDoctor(@PathVariable Long doctorId) {
+        return medicalRecordService.getAllMedicalRecordsForDoctor(doctorId);
+    }
+    @GetMapping("/patient/{patientId}")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'doctor:read' , 'reception:read' ,'patient:read' )")
+    public List<MedicalRecord> getAllMedicalRecordsForPatient(@PathVariable Long patientId) {
+        return medicalRecordService.getAllMedicalRecordsForPatient(patientId);
     }
 
     @GetMapping("/{recordId}")

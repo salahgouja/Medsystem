@@ -1,24 +1,24 @@
 package com.salah.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.salah.doctor.Doctor;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
-
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@JsonIgnoreProperties({"createdBy","lastModifiedDate","createdDate","lastModifiedBy"})
 @Entity(name ="Task" )
 @Table(name= "tasks")
-public class Task {
+public class Task extends BaseEntity{
 
-    public Task(){
-        this.createdAt =new Date();
-    }
 
     @Id
     @SequenceGenerator(
@@ -37,11 +37,6 @@ public class Task {
             columnDefinition = "Text")
     private String name;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "created_At",
-            nullable = false
-    )
-    private Date createdAt;
     @Column(name = "price",
             nullable = false
     )

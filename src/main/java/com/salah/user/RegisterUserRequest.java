@@ -1,6 +1,5 @@
-package com.salah.auth;
+package com.salah.user;
 
-import com.salah.entity.UserRole;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class RegisterRequest {
+public class RegisterUserRequest {
     @NotEmpty(message = "firstname is mandatory")
     @NotBlank (message = "firstname is mandatory")
     private String firstname;

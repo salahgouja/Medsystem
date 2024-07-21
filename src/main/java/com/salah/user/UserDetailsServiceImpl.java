@@ -1,7 +1,6 @@
-package com.salah.service;
+package com.salah.user;
 
 import com.salah.exception.UserNotFoundException;
-import com.salah.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

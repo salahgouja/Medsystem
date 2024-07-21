@@ -1,7 +1,6 @@
-package com.salah.repository;
+package com.salah.user;
 
-import com.salah.entity.User;
-import com.salah.entity.UserRole;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
