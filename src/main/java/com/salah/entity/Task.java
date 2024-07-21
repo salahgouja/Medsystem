@@ -6,8 +6,6 @@ import com.salah.doctor.Doctor;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,8 +16,6 @@ import java.util.Date;
 @Entity(name ="Task" )
 @Table(name= "tasks")
 public class Task extends BaseEntity{
-
-
     @Id
     @SequenceGenerator(
             name = "task_id_sequence",

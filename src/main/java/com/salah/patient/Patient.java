@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Table(name= "patients")
 @JsonIgnoreProperties({"password","firstname","lastname","email","phone","gender","image","title","birthdate","receptions","accountLocked","enabled","tokens","createdDate","lastModifiedDate", "authorities", "accountNonLocked", "accountNonExpired", "credentialsNonExpired"})
 
-
 public class Patient extends User {
 
     public Patient(String firstname, String lastname, String email, String password, Boolean accountLocked, Boolean enabled, Long medicalRecordNumber ) {

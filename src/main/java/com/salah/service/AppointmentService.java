@@ -5,10 +5,8 @@ import com.salah.patient.Patient;
 import com.salah.patient.PatientRepository;
 import com.salah.reception.Reception;
 import com.salah.reception.ReceptionRepository;
-import com.salah.user.User;
 import com.salah.exception.RecordNotFoundException;
 import com.salah.repository.AppointmentRepository;
-import com.salah.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

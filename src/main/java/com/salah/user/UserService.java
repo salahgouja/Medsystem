@@ -3,7 +3,6 @@ package com.salah.user;
 import com.salah.doctor.Doctor;
 import com.salah.doctor.DoctorDTO;
 import com.salah.patient.PatientDTO;
-import com.salah.patient.PatientRepository;
 import com.salah.reception.ReceptionDTO;
 import com.salah.exception.UserNotFoundException;
 import com.salah.patient.Patient;
@@ -22,7 +21,7 @@ public class UserService  {
 
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
-    private final PatientRepository patientRepository;
+
     private final PasswordEncoder passwordEncoder ;
     public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
@@ -85,11 +84,7 @@ public class UserService  {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
-    public List<UserDTO> findByRole(UserRole role) {
-        return userRepository.findByRole(role).stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-    }
+
     private UserDTO mapToDTO(User user) {
         return new UserDTO(
                 user.getId(),
@@ -169,7 +164,7 @@ public class UserService  {
 
     // Associate receptions with a doctor
     public void associateReceptions(Long doctorId, List<Long> receptionIds) {
-        Doctor doctor = (Doctor) userRepository.findById(doctorId)
+        Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new UserNotFoundException("Doctor " + doctorId + " not found"));
         List<Reception> receptions = userRepository.findAllById(receptionIds).stream()
                 .map(user -> (Reception) user)

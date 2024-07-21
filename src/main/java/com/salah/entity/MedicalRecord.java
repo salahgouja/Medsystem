@@ -6,7 +6,6 @@ import com.salah.doctor.Doctor;
 import com.salah.patient.Patient;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,14 +19,6 @@ import java.util.List;
 @JsonIgnoreProperties({"createdBy","lastModifiedDate","createdDate","lastModifiedBy"})
 
 public class MedicalRecord extends BaseEntity{
-
-    public MedicalRecord(LocalDateTime createdDate, LocalDateTime lastModifiedDate, Integer createdBy, Integer lastModifiedBy, Long id, String description, Patient patient, Doctor doctor) {
-        super(createdDate, lastModifiedDate, createdBy, lastModifiedBy);
-        this.id = id;
-        this.description = description;
-        this.patient = patient;
-        this.doctor = doctor;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,6 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -64,6 +65,19 @@ public class AuthenticationService {
     @Value("${mailing.frontend.activation-url}")
     private String activationUrl;
 
+    private <T extends User> AuthenticationResponse registerCommon(T user, JpaRepository<T, Long> repository) throws MessagingException {
+        repository.save(user);
+        sendValidationEmail(user);
+
+        var jwtToken = jwtService.generateToken(new HashMap<>(), user);
+        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(jwtRefreshToken)
+                .build();
+    }
+
     public AuthenticationResponse registerUser(RegisterUserRequest request) throws MessagingException {
         if (request.getRole() == null) {
             request.setRole(UserRole.DOCTOR);
@@ -78,24 +92,15 @@ public class AuthenticationService {
                 .role(request.getRole())
                 .build();
 
-        userRepository.save(user);
-        sendValidationEmail(user);
-
-        var jwtToken = jwtService.generateToken(new HashMap<>(), user);
-        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
-
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(jwtRefreshToken)
-                .build();
-
+        return registerCommon(user, userRepository);
     }
+
     public AuthenticationResponse registerDoctor(RegisterDoctorRequest request) throws MessagingException {
         if (request.getRole() == null) {
             request.setRole(UserRole.DOCTOR);
         }
         Doctor doctor = new Doctor(
-                request.getFirstname() ,
+                request.getFirstname(),
                 request.getLastname(),
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
@@ -104,17 +109,7 @@ public class AuthenticationService {
                 request.getSpecialization()
         );
 
-        doctorRepository.save(doctor);
-        sendValidationEmail(doctor);
-
-        var jwtToken = jwtService.generateToken(new HashMap<>(), doctor);
-        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), doctor);
-
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(jwtRefreshToken)
-                .build();
-
+        return registerCommon(doctor, doctorRepository);
     }
 
     public AuthenticationResponse registerPatient(RegisterPatientRequest request) throws MessagingException {
@@ -122,7 +117,7 @@ public class AuthenticationService {
             request.setRole(UserRole.PATIENT);
         }
         Patient patient = new Patient(
-                request.getFirstname() ,
+                request.getFirstname(),
                 request.getLastname(),
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
@@ -131,17 +126,7 @@ public class AuthenticationService {
                 request.getMedicalRecordNumber()
         );
 
-        patientRepository.save(patient);
-        sendValidationEmail(patient);
-
-        var jwtToken = jwtService.generateToken(new HashMap<>(), patient);
-        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), patient);
-
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(jwtRefreshToken)
-                .build();
-
+        return registerCommon(patient, patientRepository);
     }
 
     public AuthenticationResponse registerReception(RegisterReceptionRequest request) throws MessagingException {
@@ -149,7 +134,7 @@ public class AuthenticationService {
             request.setRole(UserRole.RECEPTION);
         }
         Reception reception = new Reception(
-                request.getFirstname() ,
+                request.getFirstname(),
                 request.getLastname(),
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
@@ -158,18 +143,9 @@ public class AuthenticationService {
                 request.getSalary()
         );
 
-        receptionRepository.save(reception);
-        sendValidationEmail(reception);
-
-        var jwtToken = jwtService.generateToken(new HashMap<>(), reception);
-        var jwtRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), reception);
-
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(jwtRefreshToken)
-                .build();
-
+        return registerCommon(reception, receptionRepository);
     }
+
 
     private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);
