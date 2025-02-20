@@ -3,7 +3,6 @@ package com.salah.patient;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.salah.doctor.Doctor;
-import com.salah.entity.MedicalRecord;
 import com.salah.user.User;
 import com.salah.user.UserRole;
 import jakarta.persistence.*;
@@ -54,13 +53,6 @@ public class Patient extends User {
 
 
 
-    @OneToMany(mappedBy = "patient")
-    private List<MedicalRecord> medicalRecords;
-    @JsonProperty("medicalRecords")
-    public List<Long> getMedicalRecordIds() {
-        return medicalRecords.stream()
-                .map(MedicalRecord::getId)
-                .collect(Collectors.toList());
-    }
+
 
 }

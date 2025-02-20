@@ -22,5 +22,4 @@ public record UserDTO(
         Boolean enable,
         LocalDateTime createdDate ,
         LocalDateTime lastModifiedDate
-
         ) {}

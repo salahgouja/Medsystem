@@ -10,9 +10,6 @@ import com.salah.doctor.DoctorRepository;
 import com.salah.patient.Patient;
 import com.salah.patient.PatientRepository;
 import com.salah.patient.RegisterPatientRequest;
-import com.salah.reception.Reception;
-import com.salah.reception.ReceptionRepository;
-import com.salah.reception.RegisterReceptionRequest;
 import com.salah.token.Token;
 import com.salah.user.RegisterUserRequest;
 import com.salah.user.User;
@@ -52,9 +49,6 @@ public class AuthenticationService {
     private final UserRepository userRepository ;
     private final DoctorRepository doctorRepository ;
     private final PatientRepository patientRepository ;
-    private final ReceptionRepository receptionRepository ;
-
-
     private final PasswordEncoder passwordEncoder ;
     private final TokenRepository tokenRepository ;
     private final EmailService emailService ;
@@ -128,24 +122,6 @@ public class AuthenticationService {
 
         return registerCommon(patient, patientRepository);
     }
-
-    public AuthenticationResponse registerReception(RegisterReceptionRequest request) throws MessagingException {
-        if (request.getRole() == null) {
-            request.setRole(UserRole.RECEPTION);
-        }
-        Reception reception = new Reception(
-                request.getFirstname(),
-                request.getLastname(),
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),
-                request.getAccountLocked(),
-                request.getEnabled(),
-                request.getSalary()
-        );
-
-        return registerCommon(reception, receptionRepository);
-    }
-
 
     private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);

@@ -2,10 +2,12 @@ package com.salah.user;
 
 import com.salah.doctor.DoctorDTO;
 import com.salah.patient.PatientDTO;
-import com.salah.reception.ReceptionDTO;
+
 import com.salah.doctor.Doctor;
 import com.salah.patient.Patient;
-import com.salah.reception.Reception;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +40,6 @@ public class UserController {
         service.addPatient(patientDTO);
     }
 
-    @PostMapping("/reception")
-    public void addReception(@RequestBody @Valid ReceptionDTO receptionDTO) {
-        service.addReception(receptionDTO);
-    }
 
     @DeleteMapping("{userId}")
     public void deleteUser(@PathVariable("userId") Long id) {
@@ -83,10 +81,7 @@ public class UserController {
         return service.getPatientById(patientId);
     }
 
-    @GetMapping("/reception/{receptionId}")
-    public Reception getReceptionById(@PathVariable Long receptionId) {
-        return service.getReceptionById(receptionId);
-    }
+
 
     /////////////////////
 
@@ -95,22 +90,11 @@ public class UserController {
         List<Long> patientIds = request.get("patientIds");
         service.associatePatients(doctorId, patientIds);
     }
-
-    @PutMapping("/doctors/{doctorId}/receptions")
-    public void associateReceptions(@PathVariable Long doctorId, @RequestBody Map<String, List<Long>> request) {
-        List<Long> receptionIds = request.get("receptionIds");
-        service.associateReceptions(doctorId, receptionIds);
-    }
-
     @GetMapping("/doctors/{doctorId}/patients")
     public List<Patient> getDoctorPatients(@PathVariable Long doctorId) {
         return service.getDoctorPatients(doctorId);
     }
 
-    @GetMapping("/doctors/{doctorId}/receptions")
-    public List<Reception> getDoctorReceptions(@PathVariable Long doctorId) {
-        return service.getDoctorReceptions(doctorId);
-    }
 
     @GetMapping("/patients/{patientId}/doctors")
 
@@ -118,10 +102,6 @@ public class UserController {
         return service.getPatientDoctors(patientId);
     }
 
-    @GetMapping("/receptions/{receptionId}/doctors")
-    public List<Doctor> getReceptionDoctors(@PathVariable Long receptionId) {
-        return service.getReceptionDoctors(receptionId);
-    }
 //////////////////
 
 

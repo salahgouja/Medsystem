@@ -3,7 +3,6 @@ package com.salah;
 import com.salah.auth.AuthenticationService;
 import com.salah.doctor.RegisterDoctorRequest;
 import com.salah.patient.RegisterPatientRequest;
-import com.salah.reception.RegisterReceptionRequest;
 import com.salah.user.RegisterUserRequest;
 import com.salah.user.UserRole;
 import org.springframework.boot.CommandLineRunner;
@@ -56,16 +55,6 @@ public class Main {
                     .build();
             System.out.println("Doctor token: " + service.registerDoctor(doctor).getAccessToken());
 
-            var reception = RegisterReceptionRequest
-                    .builder()
-                    .firstname("reception")
-                    .lastname("reception")
-                    .email("reception@mail.com")
-                    .password("password")
-                    .role(UserRole.RECEPTION)
-                    .salary(3500.0F)
-                    .build();
-            System.out.println("Reception token: " + service.registerReception(reception).getAccessToken());
 
             var patient = RegisterPatientRequest
                     .builder()
@@ -77,11 +66,7 @@ public class Main {
                     .medicalRecordNumber(111L)
                     .build();
             System.out.println("Patient token: " + service.registerPatient(patient).getAccessToken());
-
-
         };
 
     }
 }
-
-//netstat -a -o -n

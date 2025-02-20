@@ -3,10 +3,8 @@ package com.salah.user;
 import com.salah.doctor.Doctor;
 import com.salah.doctor.DoctorDTO;
 import com.salah.patient.PatientDTO;
-import com.salah.reception.ReceptionDTO;
 import com.salah.exception.UserNotFoundException;
 import com.salah.patient.Patient;
-import com.salah.reception.Reception;
 import com.salah.doctor.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,12 +46,7 @@ public class UserService  {
         userRepository.save(patient);
     }
 
-    public void addReception(ReceptionDTO receptionDTO) {
-        Reception reception = new Reception();
-        mapToEntity(receptionDTO.user(), reception);
-        reception.setSalary(receptionDTO.salary());
-        userRepository.save(reception);
-    }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
@@ -138,18 +131,7 @@ public class UserService  {
         }
         return (Patient) user;
     }
-    public Reception getReceptionById(Long receptionId) {
-        User user = userRepository.findById(receptionId)
-                .orElseThrow(() -> new UserNotFoundException("Reception not found with id: " + receptionId));
-
-        if (!(user instanceof Reception)) {
-            throw new UserNotFoundException("User with id " + receptionId + " is not a reception");
-        }
-        return (Reception) user;
-    }
-
     /////////////////////
-
 
     // Associate patients with a doctor
     public void associatePatients(Long doctorId, List<Long> patientIds) {
@@ -162,17 +144,6 @@ public class UserService  {
         userRepository.save(doctor);
     }
 
-    // Associate receptions with a doctor
-    public void associateReceptions(Long doctorId, List<Long> receptionIds) {
-        Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new UserNotFoundException("Doctor " + doctorId + " not found"));
-        List<Reception> receptions = userRepository.findAllById(receptionIds).stream()
-                .map(user -> (Reception) user)
-                .collect(Collectors.toList());
-        doctor.setReceptions(receptions);
-        userRepository.save(doctor);
-    }
-
     // Get all patients of a doctor
     public List<Patient> getDoctorPatients(Long doctorId) {
         Doctor doctor = (Doctor) userRepository.findById(doctorId)
@@ -180,12 +151,6 @@ public class UserService  {
         return doctor.getPatients();
     }
 
-    // Get all receptions of a doctor
-    public List<Reception> getDoctorReceptions(Long doctorId) {
-        Doctor doctor = (Doctor) userRepository.findById(doctorId)
-                .orElseThrow(() -> new UserNotFoundException("Doctor " + doctorId + " not found"));
-        return doctor.getReceptions();
-    }
 
     // Get all doctors of a patient
     public List<Doctor> getPatientDoctors(Long patientId) {
@@ -194,11 +159,5 @@ public class UserService  {
         return patient.getDoctors();
     }
 
-    // Get all doctors of a reception
-    public List<Doctor> getReceptionDoctors(Long receptionId) {
-        Reception reception = (Reception) userRepository.findById(receptionId)
-                .orElseThrow(() -> new UserNotFoundException("Reception " + receptionId + " not found"));
-        return reception.getDoctors();
-    }
 ////////////
 }
