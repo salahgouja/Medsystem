@@ -10,19 +10,10 @@ public enum Permisson {
     ADMIN_CREATE("admin:create"),
     ADMIN_DELETE("admin:delete"),
 
-
     DOCTOR_READ("doctor:read"),
     DOCTOR_UPDATE("doctor:update"),
     DOCTOR_CREATE("doctor:create"),
     DOCTOR_DELETE("doctor:delete"),
-
-
-
-    RECEPTION_READ("reception:read"),
-    RECEPTION_UPDATE("reception:update"),
-    RECEPTION_CREATE("reception:create"),
-    RECEPTION_DELETE("reception:delete"),
-
 
     PATIENT_READ("patient:read"),
     PATIENT_UPDATE("patient:update"),

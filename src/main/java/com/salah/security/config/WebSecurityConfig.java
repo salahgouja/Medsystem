@@ -51,28 +51,17 @@ public class WebSecurityConfig {
                                 req -> req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
 
-                                        .requestMatchers("/api/v1/invoices/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), RECEPTION.name(), PATIENT.name())
-                                        .requestMatchers("/api/v1/medicalRecords/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), RECEPTION.name(), PATIENT.name())
+                                        .requestMatchers("/api/v1/invoices/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), PATIENT.name())
+                                        .requestMatchers("/api/v1/medicalRecords/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), PATIENT.name())
 
-                                        .requestMatchers("/api/v1/users/patients/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), RECEPTION.name(), PATIENT.name())
-                                        .requestMatchers(GET, "/api/v1/users/patients/{patientId}/doctors").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name(), RECEPTION_READ.name(),PATIENT_READ.name())
+                                        .requestMatchers("/api/v1/users/patients/**").hasAnyRole(ADMIN.name(), DOCTOR.name(),PATIENT.name())
+                                        .requestMatchers(GET, "/api/v1/users/patients/{patientId}/doctors").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name(),PATIENT_READ.name())
 
-                                        .requestMatchers("/api/v1/users/patient/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), RECEPTION.name(), PATIENT.name())
-                                        .requestMatchers(GET, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name(), RECEPTION_READ.name(),PATIENT_READ.name())
-                                        .requestMatchers(POST, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_CREATE.name(), DOCTOR_CREATE.name(), RECEPTION_CREATE.name(), PATIENT_CREATE.name())
-                                        .requestMatchers(PUT, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_UPDATE.name(), DOCTOR_UPDATE.name(), RECEPTION_UPDATE.name(), PATIENT_UPDATE.name() )
-                                        .requestMatchers(DELETE, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_DELETE.name(), DOCTOR_DELETE.name(), RECEPTION_DELETE.name(), PATIENT_DELETE.name())
-
-                                        .requestMatchers("/api/v1/users/receptions/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), RECEPTION.name())
-                                        .requestMatchers(GET, "/api/v1/users/receptions/**").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name(), RECEPTION_READ.name())
-                                        .requestMatchers(GET, "/api/v1/users/receptions/{receptionId}/doctors").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name(), RECEPTION_READ.name())
-
-                                        .requestMatchers("/api/v1/users/reception/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), RECEPTION.name())
-                                        .requestMatchers(GET, "/api/v1/users/reception/**").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name(), RECEPTION_READ.name())
-                                        .requestMatchers(POST, "/api/v1/users/reception/**").hasAnyAuthority(ADMIN_CREATE.name(), DOCTOR_CREATE.name(), RECEPTION_CREATE.name())
-                                        .requestMatchers(PUT, "/api/v1/users/reception/**").hasAnyAuthority(ADMIN_UPDATE.name(), DOCTOR_UPDATE.name(), RECEPTION_UPDATE.name())
-                                        .requestMatchers(DELETE, "/api/v1/users/reception/**").hasAnyAuthority(ADMIN_DELETE.name(), DOCTOR_DELETE.name(), RECEPTION_DELETE.name())
-
+                                        .requestMatchers("/api/v1/users/patient/**").hasAnyRole(ADMIN.name(), DOCTOR.name(), PATIENT.name())
+                                        .requestMatchers(GET, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name(),PATIENT_READ.name())
+                                        .requestMatchers(POST, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_CREATE.name(), DOCTOR_CREATE.name(), PATIENT_CREATE.name())
+                                        .requestMatchers(PUT, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_UPDATE.name(), DOCTOR_UPDATE.name(), PATIENT_UPDATE.name() )
+                                        .requestMatchers(DELETE, "/api/v1/users/patient/**").hasAnyAuthority(ADMIN_DELETE.name(), DOCTOR_DELETE.name(),PATIENT_DELETE.name())
 
                                         .requestMatchers("/api/v1/users/doctors/**").hasAnyRole(ADMIN.name(), DOCTOR.name())
                                         .requestMatchers(GET, "/api/v1/users/doctors/{doctorId}/patients").hasAnyAuthority(ADMIN_READ.name(), DOCTOR_READ.name())

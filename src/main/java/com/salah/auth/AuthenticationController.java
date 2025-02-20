@@ -3,7 +3,6 @@ package com.salah.auth;
 
 import com.salah.doctor.RegisterDoctorRequest;
 import com.salah.patient.RegisterPatientRequest;
-import com.salah.reception.RegisterReceptionRequest;
 import com.salah.user.RegisterUserRequest;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,17 +48,6 @@ public class AuthenticationController {
     ) throws MessagingException {
 
         service.registerPatient(request);
-        return ResponseEntity.accepted().build();
-    }
-
-
-    @PostMapping("/registerReception")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<AuthenticationResponse> registerReception(
-            @RequestBody @Valid RegisterReceptionRequest request
-    ) throws MessagingException {
-
-        service.registerReception(request);
         return ResponseEntity.accepted().build();
     }
 

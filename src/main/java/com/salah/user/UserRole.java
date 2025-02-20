@@ -33,12 +33,8 @@ public enum UserRole {
                     PATIENT_READ,
                     PATIENT_UPDATE,
                     PATIENT_CREATE,
-                    PATIENT_DELETE,
+                    PATIENT_DELETE
 
-                    RECEPTION_READ,
-                    RECEPTION_UPDATE,
-                    RECEPTION_CREATE,
-                    RECEPTION_DELETE
             )
     ),
 
@@ -50,11 +46,6 @@ public enum UserRole {
             DOCTOR_UPDATE,
             DOCTOR_CREATE,
             DOCTOR_DELETE,
-
-            RECEPTION_READ,
-            RECEPTION_UPDATE,
-            RECEPTION_CREATE,
-            RECEPTION_DELETE,
 
             PATIENT_READ,
             PATIENT_UPDATE,
@@ -73,22 +64,6 @@ public enum UserRole {
             PATIENT_DELETE
             )
     ),
-
-
-    RECEPTION(
-            Set.of(
-
-            RECEPTION_READ,
-            RECEPTION_UPDATE,
-            RECEPTION_CREATE,
-            RECEPTION_DELETE,
-
-            PATIENT_READ,
-            PATIENT_UPDATE,
-            PATIENT_CREATE,
-            PATIENT_DELETE
-            )
-    )
 
     ;
 
